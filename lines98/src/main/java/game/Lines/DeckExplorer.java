@@ -6,30 +6,23 @@ import java.util.Comparator;
 import java.util.List;
 
 public class DeckExplorer {
-  private Cell cells[][];
   private final int distance = 10;
-  private final int minWinAmount = 3;
+  private int score;
   private int topIndex;
   private int bottomIndex;
   private int leftIndex;
   private int rightIndex;
 
-  public DeckExplorer(Cell cells[][]) {
-    this.cells = cells;
-  }
 
-  public boolean checkWinBalls(Cell cell) {
-    if (celectRow(cell, 0) || celectRow(cell, 1) || celectRow(cell, 2) || celectRow(cell, 3)) {
+  public boolean checkWinBalls(Cell [][] cells, Cell cell) {
+    if (celectRow(cells, cell, 0) || celectRow(cells, cell, 1) || celectRow(cells, cell, 2) || celectRow(cells, cell, 3)) {
       return true;
     }
-   // celectRow(cell, 0);
-  //  celectRow(cell, 1);
-  // celectRow(cell, 2);
-  //  celectRow(cell, 3);
+
     return false;
   }
 
-  private boolean celectRow(Cell cell, int index) {
+  private boolean celectRow(Cell [][] cells, Cell cell, int index) {
     boolean isWin = false;
     List<Cell> rowList = new ArrayList<Cell>();
     rowList.add(cell);
@@ -42,7 +35,7 @@ public class DeckExplorer {
     incrementElements(index, 1);
 
     if (index != 3) {
-      while (rightIndex < Deck.X_AMOUNT_CELLS && topIndex < Deck.Y_AMOUNT_CELLS
+      while (rightIndex < Config.X_AMOUNT_CELLS && topIndex < Config.Y_AMOUNT_CELLS
           && cells[topIndex][rightIndex].getBall() != null
           && cells[topIndex][rightIndex].getBall().getColor() == cell.getBall().getColor()) {
         rowList.add(cells[topIndex][rightIndex]);
@@ -54,27 +47,32 @@ public class DeckExplorer {
         incrementElements(index, 1);
       }
     } else {
-      while (leftIndex >= 0 && topIndex < Deck.Y_AMOUNT_CELLS && cells[topIndex][leftIndex].getBall() != null
+      while (leftIndex >= 0 && topIndex < Config.Y_AMOUNT_CELLS && cells[topIndex][leftIndex].getBall() != null
           && cells[topIndex][leftIndex].getBall().getColor() == cell.getBall().getColor()) {
         rowList.add(cells[topIndex][leftIndex]);
         incrementElements(index, 0);
       }
-      while (rightIndex < Deck.X_AMOUNT_CELLS && bottomIndex >= 0 && cells[bottomIndex][rightIndex].getBall() != null
+      while (rightIndex < Config.X_AMOUNT_CELLS && bottomIndex >= 0 && cells[bottomIndex][rightIndex].getBall() != null
           && cells[bottomIndex][rightIndex].getBall().getColor() == cell.getBall().getColor()) {
         rowList.add(cells[bottomIndex][rightIndex]);
         incrementElements(index, 1);
       }
     }
 
-    if (rowList.size() >= minWinAmount) {
+    if (rowList.size() >= Config.MIN_WIN_AMOUNT_OF_BALLS) {
       for (Cell tempCell : rowList) {
         System.out.println("Check    " + tempCell.getxCoordinate() + "   " + tempCell.getyCoordinate());
         cells[tempCell.getxCoordinate()][tempCell.getyCoordinate()].deleteBall();
       }
+      score = score + (rowList.size() - Config.MIN_WIN_AMOUNT_OF_BALLS) * Config.COST_OF_NEW_BALL + Config.MIN_SCORE;
       isWin = true;
     }
 
     return isWin;
+  }
+
+  public int getScore() {
+    return score;
   }
 
   private void incrementElements(int index, int variant) {
@@ -119,17 +117,17 @@ public class DeckExplorer {
     }
   }
 
-  private List<Cell> neighbors(Cell cell) {
+  private List<Cell> neighbors(Cell [][] cells, Cell cell) {
     List<Cell> neighbors = new ArrayList<Cell>();
 
-    if (cell.getxCoordinate() + 1 < Deck.X_AMOUNT_CELLS
+    if (cell.getxCoordinate() + 1 < Config.X_AMOUNT_CELLS
         && cells[cell.getxCoordinate() + 1][cell.getyCoordinate()].getBall() == null) {
       neighbors.add(cells[cell.getxCoordinate() + 1][cell.getyCoordinate()]);
     }
     if (cell.getxCoordinate() - 1 >= 0 && cells[cell.getxCoordinate() - 1][cell.getyCoordinate()].getBall() == null) {
       neighbors.add(cells[cell.getxCoordinate() - 1][cell.getyCoordinate()]);
     }
-    if (cell.getyCoordinate() + 1 < Deck.Y_AMOUNT_CELLS
+    if (cell.getyCoordinate() + 1 < Config.Y_AMOUNT_CELLS
         && cells[cell.getxCoordinate()][cell.getyCoordinate() + 1].getBall() == null) {
       neighbors.add(cells[cell.getxCoordinate()][cell.getyCoordinate() + 1]);
     }
@@ -144,7 +142,7 @@ public class DeckExplorer {
     return Math.sqrt(Math.pow((xGoal - xStart), 2) + Math.pow((yGoal - yStart), 2));
   }
 
-  public List<Cell> exploreWay(int xStart, int yStart, int xGoal, int yGoal) { // A* alogoritm
+  public List<Cell> exploreWay(Cell [][]cells, int xStart, int yStart, int xGoal, int yGoal) { // A* alogoritm
     List<Cell> openset = new ArrayList<Cell>(); // will explore
     List<Cell> closeset = new ArrayList<Cell>(); // was explored
     int tentativeScore;
@@ -170,7 +168,7 @@ public class DeckExplorer {
 
       openset.remove(cell);
       closeset.add(cell);
-      for (Cell neightbourCell : neighbors(cell)) {
+      for (Cell neightbourCell : neighbors(cells, cell)) {
         if (closeset.contains(neightbourCell)) {
           continue;
         }

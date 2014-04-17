@@ -1,48 +1,47 @@
 package game.Lines;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BallCreator {
-  private Cell [][] cells;
   private Random random;
-  private int amountOfBals = 3;
+  private List<Integer> positionsList;
+  private Color color;
 
-  public BallCreator(Cell cells [][]) {
-    this.cells = cells;
+  public BallCreator() {
     random = new Random();
+    positionsList = new ArrayList<Integer>();
+    fillPositionsList();
+    color = new Color();
   }
 
-  public boolean checkPosotion(int xCoordinate, int yCoordinate) {
-    if (cells[xCoordinate][yCoordinate].getBall() != null) {
-      return false;
-    } else {
-      return true;
+  private void fillPositionsList() {
+    for (int i = 0; i < Config.X_AMOUNT_CELLS; i++) {
+      for (int j = 0; j < Config.Y_AMOUNT_CELLS; j++) {
+        positionsList.add(i * 10 + j);
+      }
     }
   }
 
-  public void createBalls() {
-    for (int i = 0; i < amountOfBals; i++) {
-      final Ball ball = createBall();
-      (cells[ball.getxPosition()][ball.getyPosition()]).setBall(ball);
+  public void createBalls(Cell [][] cells) {
+    for (int i = 0; i < Config.CREATE_AMOUNT_OF_BALLS; i++) {
+      createBall(cells);
     }
   }
 
-  public void createBallFixPosition(int x, int y) {
-    Ball ball = new Ball(Color.RED, x, y);
-    cells[x][y].setBall(ball);
+  public void createBallOnFixedPosition(Cell [][] cells, int x, int y) {
+    cells[x][y].setBall(new Ball(color.getColors().get(0)));
   }
 
-  public Ball createBall() {
-    int xPos = random.nextInt(Deck.X_AMOUNT_CELLS);
-    int yPos = random.nextInt(Deck.Y_AMOUNT_CELLS);
+  public Cell createBall(Cell [][] cells) {
+    int index = random.nextInt(Config.X_AMOUNT_CELLS * Config.Y_AMOUNT_CELLS);
+    int xPos = positionsList.get(index) / 10;
+    int yPos = positionsList.get(index) % 10;
 
-    while (!checkPosotion(xPos, yPos)) {
-       xPos = random.nextInt(Deck.X_AMOUNT_CELLS);
-       yPos = random.nextInt(Deck.Y_AMOUNT_CELLS);
-    }
-    int index = random.nextInt(Color.values().length);
+    int colorIndex = random.nextInt(color.getColors().size());
+    cells[xPos][yPos].setBall(new Ball(color.getColors().get(colorIndex)));
 
-  //  return new Ball(Color.values()[index], yPos, xPos);
-    return new Ball(Color.RED, yPos, xPos);
+    return cells[xPos][yPos];
   }
 }

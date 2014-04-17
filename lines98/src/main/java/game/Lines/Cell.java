@@ -9,8 +9,8 @@ public class Cell {
   private int valueWay;
 
   public Cell(int xCoordinate, int yCoordinate) {
-    this.setxCoordinate(xCoordinate);
-    this.setyCoordinate(yCoordinate);
+    this.xCoordinate = xCoordinate;
+    this.yCoordinate = yCoordinate;
   }
 
   /**
@@ -21,24 +21,10 @@ public class Cell {
   }
 
   /**
-   * @param xCoordinate the xCoordinate to set
-   */
-  private void setxCoordinate(int xCoordinate) {
-    this.xCoordinate = xCoordinate;
-  }
-
-  /**
    * @return the yCoordinate
    */
   public int getyCoordinate() {
     return yCoordinate;
-  }
-
-  /**
-   * @param yCoordinate the yCoordinate to set
-   */
-  private void setyCoordinate(int yCoordinate) {
-    this.yCoordinate = yCoordinate;
   }
 
   /**
