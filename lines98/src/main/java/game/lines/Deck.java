@@ -1,4 +1,4 @@
-package game.Lines;
+package game.lines;
 
 import java.util.Formatter;
 import java.util.List;

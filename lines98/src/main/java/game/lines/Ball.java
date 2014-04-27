@@ -1,4 +1,4 @@
-package game.Lines;
+package game.lines;
 
 public class Ball {
   private String color;

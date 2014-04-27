@@ -1,6 +1,6 @@
-package task.Lines;
+package task.lines;
 
-import game.Lines.Deck;
+import game.lines.Deck;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -43,19 +43,19 @@ public class AppTest extends TestCase {
     assertTrue(deck.getAmountOfBalls() == 7);
     deck.click(3, 0);
     deck.click(5, 4);
-    deck.show();
+    //deck.show();
     assertTrue(deck.getScore() == 8);
     assertTrue(deck.getAmountOfBalls() == 4);
     deck.createFixPositionBall(5, 2);
     deck.createFixPositionBall(6, 3);
     deck.createFixPositionBall(5, 5);
-    deck.show();
+    //deck.show();
     assertTrue(deck.getAmountOfBalls() == 7);
     deck.click(5, 5);
-    deck.show();
+  //  deck.show();
     assertTrue(deck.getAmountOfBalls() == 7);
     deck.click(7, 4);
-    deck.show();
+   // deck.show();
     assertTrue(deck.getScore() == 16);
     assertTrue(deck.getAmountOfBalls() == 4);
     deck.click(7, 6);

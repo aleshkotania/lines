@@ -1,4 +1,4 @@
-package game.Lines;
+package game.lines;
 
 public class Cell {
   private int xCoordinate;

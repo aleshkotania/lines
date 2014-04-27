@@ -1,4 +1,4 @@
-package game.Lines;
+package game.lines;
 
 /**
  * Hello world!

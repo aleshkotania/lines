@@ -1,4 +1,4 @@
-package game.Lines;
+package game.lines;
 
 public class Config {
   public static int X_AMOUNT_CELLS = 9;
